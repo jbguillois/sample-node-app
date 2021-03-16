@@ -23,7 +23,8 @@ var server = app.listen(port, () => {
 
 // Now add a default GET handler
 app.get("/", (req, res, next) => {
-  let str = '<h1>Greetings from Node.js SampleApp!</h1>';
+  let str = '<body><div style="text-align: center;">';
+  str = str + '<div style="display: inline-block; background-color: #92a8d1; text-align: center; border-style: solid;"><h1>Greetings from SampleApp!</h1>';
   str = str + '<h3>Today is '+ new Date().toLocaleString(
   'en-gb',
       {
@@ -34,7 +35,14 @@ app.get("/", (req, res, next) => {
         minute: 'numeric',
         second: 'numeric'
       })+'</h3>';
-  str = str + '('+JSON.stringify(getAllIPAddrs())+')';
+  // str = str + '<div>This app is running in a container having the following IP addresses: '+'('+JSON.stringify(getAllIPAddrs())+')'+'</div>';
+  str = str + '<div>This app is running in a container having the following IP addresses: '+'<ul style="list-style-type:none;">';
+
+  getAllIPAddrs().forEach((ip) => {
+    str = str + `<li>${ip}</li>`
+  });
+
+  str = str + '</ul></div></div></body>';
   res.send(str);
 });
 
@@ -99,16 +107,13 @@ function user2JSON(user) {
 
 function getAllIPAddrs() {
 
-  const results = Object.create(null);
+  const results = [];
 
   for (const name of Object.keys(nets)) {
     for (const net of nets[name]) {
       // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
       if (net.family === 'IPv4' && !net.internal) {
-        if (!results[name]) {
-          results[name] = [];
-        }
-        results[name].push(net.address);
+        results.push(name + ': '+net.address);
       }
     }
   }
