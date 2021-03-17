@@ -18,11 +18,12 @@ const port = process.env.CLUSTER_SAMPLE_APP_PORT || 3000;
 initUsers();
 
 var server = app.listen(port, () => {
-  console.log("Server started and listening on port "+port);
+  console.info("Server started...");
 });
 
 // Now add a default GET handler
 app.get("/", (req, res, next) => {
+  console.debug('Processing a GET request on /');
   let str = '<body><div style="text-align: center;">';
   str = str + '<div style="display: inline-block; background-color: #92a8d1; text-align: center; border-style: solid;"><h1>Greetings from SampleApp!</h1>';
   str = str + '<h3>Today is '+ new Date().toLocaleString(
@@ -48,13 +49,14 @@ app.get("/", (req, res, next) => {
 
 // Handle user resource (get all)
 app.get("/users", (req, res, next) => {
-  // console.log("Getting all users");
+  console.debug("Processing a GET request on /users");
   res.set('Content-Type', 'application/json');
   res.json(JSON.stringify(users));
 });
 
 // Handle user resource (find)
 app.get("/users/:userId", (req, res, next) => {
+  console.debug('Processing a GET request on /users/'+req.params.userId);
   // Find the requested user
   let found = false;
   const requestedId = parseInt(req.params.userId);
