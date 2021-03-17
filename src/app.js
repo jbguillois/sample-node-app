@@ -12,7 +12,7 @@ const nets = networkInterfaces();
 
 let users = [];
 const app = express();
-const port = process.env.SAMPLE_NODE_APP_PORT || 3000;
+const port = process.env.CLUSTER_SAMPLE_APP_PORT || 3000;
 
 // Initialize our users
 initUsers();
